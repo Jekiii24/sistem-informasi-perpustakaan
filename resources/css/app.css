@@ -1,9 +1,55 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+
+/* body {
+    padding-top: 1rem;
+} */
+
+/* Make body take full height to push footer to bottom */
+.min-vh-100 {
+    min-height: 100vh;
+}
+
+/* Sidebar styling */
+aside .nav-link {
+    padding: 0.75rem 1rem;
+    color: #495057; /* Darker text for better contrast */
+    border-radius: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+aside .nav-link:hover,
+aside .nav-link.active {
+    background-color: #e9ecef; /* Light gray background on hover/active */
+    color: #0d6efd; /* Primary blue for active/hover text */
+    font-weight: 500;
+}
+
+/* Navbar links styling */
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Footer styling */
+footer small {
+    font-size: 0.85em;
+}
+
+/* Optional: Scrollable sidebar for many items */
+.nav.flex-scroll {
+    max-height: calc(100vh - 200px); /* Adjust based on navbar/footer height */
+    overflow-y: auto;
 }
