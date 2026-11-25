@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +18,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Hapus user yang ada agar tidak duplikat saat seeding ulang
-        User::truncate();
+        Schema::disableForeignKeyConstraints();
+User::truncate();
+// Jika ada perintah truncate() untuk tabel lain (misalnya Category::truncate() atau Book::truncate()), taruh juga di sini
+Schema::enableForeignKeyConstraints();
 
         User::create([
             'name' => 'Admin Perpustakaan',

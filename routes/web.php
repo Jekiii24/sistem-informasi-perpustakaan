@@ -16,10 +16,15 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
 // Protected routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+Route::resource('members', MemberController::class);
+Route::resource('borrowings', BorrowingController::class);
+Route::post('borrowings/{borrowing}/return', [BorrowingController::class, 'storeReturn'])->name('borrowings.storeReturn');
+Route::get('borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.returnBook');
 
 // Admin routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -36,3 +41,4 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
 });
+
