@@ -12,6 +12,18 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    <form action="{{ route('books.index') }}" method="GET" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control"
+            placeholder="Cari judul atau pengarang..."
+            value="{{ request('search') }}">
+        <button type="submit" class="btn btn-primary">Cari</button>
+        @if(request('search'))
+            <a href="{{ route('books.index') }}" class="btn btn-secondary">Reset</a>
+        @endif
+    </div>
+</form>
+
     <table class="table mt-3">
         <thead>
             <tr>

@@ -13,11 +13,20 @@ class BookController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        $books = Book::with('category')->paginate(10);
-        return view('books.index', compact('books'));
-    }
+    public function index(Request $request)
+{
+    $query = Book::with('category');
+
+    if ($search = $request->input('search')) {
+        $query->where(function ($q) use ($search) {
+        $q->where('title', 'like', "%{$search}%")
+        ->orWhere('author', 'like', "%{$search}%");
+    });
+}
+
+    $books = $query->paginate(10)->withQueryString();
+    return view('books.index', compact('books'));
+}
 
     public function show(Book $book)
     {
