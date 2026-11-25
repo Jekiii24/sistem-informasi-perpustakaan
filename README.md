@@ -29,7 +29,18 @@ Project Final Mata Kuliah Web Programming - Laravel.
 6. Jalankan `npm install && npm run dev` (jika menggunakan frontend asset).
 7. Jalankan `php artisan serve`.
 
+## Login Credentials
+Setelah menjalankan `php artisan migrate --seed`, gunakan kredensial berikut:
+
+**Admin**
+- Email: `admin@perpus.com`
+- Password: `password`
+
+**Petugas**
+- Email: `petugas@perpus.com`
+- Password: `password`
+
 ## Anggota Kelompok
-- [Nama Mahasiswa 1]
-- [Nama Mahasiswa 2]
-- [Nama Mahasiswa 3]
+- Zaki
+- Rizqi
+- Zhilan
