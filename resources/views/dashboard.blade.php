@@ -1,46 +1,40 @@
-
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Dashboard</h1>
+    <div class="page-head">
+        <div>
+            <h1>Dashboard</h1>
+            <p class="page-head-sub">Ringkasan koleksi dan aktivitas perpustakaan.</p>
+        </div>
+    </div>
 
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Jumlah Judul Buku</h5>
-                    <h2>{{ $totalBooks }}</h2>
-                </div>
+    <div class="row g-3">
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <p class="stat-label">Jumlah Judul Buku</p>
+                <p class="stat-value">{{ $totalBooks }}</p>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Total Stok Buku</h5>
-                    <h2>{{ $totalStock }}</h2>
-                </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card stat-green">
+                <p class="stat-label">Total Stok Buku</p>
+                <p class="stat-value">{{ $totalStock }}</p>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Jumlah Anggota</h5>
-                    <h2>{{ $totalMembers }}</h2>
-                </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card stat-wood">
+                <p class="stat-label">Jumlah Anggota</p>
+                <p class="stat-value">{{ $totalMembers }}</p>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Sedang Dipinjam</h5>
-                    <h2>{{ $borrowedCount }}</h2>
-                </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card stat-stamp">
+                <p class="stat-label">Sedang Dipinjam</p>
+                <p class="stat-value">{{ $borrowedCount }}</p>
             </div>
         </div>
     </div>
-</div>
 @endsection

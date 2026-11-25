@@ -6,101 +6,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perpustakaan Sederhana - @yield('title', 'Dashboard')</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body>
+    <a class="skip-link" href="#main-content">Lewati ke konten</a>
 
     @if (!request()->routeIs('login'))
 
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('dashboard') }}">Perpustakaan Sederhana</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
-                        </li>
-                        @can('admin')
+        <div class="app-shell">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid px-3 px-lg-4">
+                    <a class="navbar-brand" href="{{ route('dashboard') }}">Perpustakaan Sederhana</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Buka menu navigasi">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto align-items-lg-center">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('users.index') }}">User</a>
+                                <a class="nav-link" href="{{ route('logout') }}"
+                                    onclick="return confirm('Yakin logout?')">Logout</a>
                             </li>
-                        @endcan
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('categories.index') }}">Kategori</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('books.index') }}">Buku</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('members.index') }}">Anggota</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('borrowings.index') }}">Peminjaman</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}"
-                                onclick="return confirm('Yakin logout?')">Logout</a>
-                        </li>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
-        <!-- Main Layout -->
-        <div class="container mt-4">
-            <div class="row">
+            <!-- Main Layout -->
+            <div class="app-body">
                 <!-- Sidebar -->
-                <aside class="col-md-3">
-                    <nav class="flex-column nav flex-scroll">
-                        <a class="nav-link active" href="{{ route('dashboard') }}">Dashboard</a>
+                <aside class="sidebar">
+                    <p class="sidebar-title">Menu</p>
+                    <nav class="sidebar-nav">
+                        <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                            href="{{ route('dashboard') }}">Dashboard</a>
                         @can('admin')
-                            <a class="nav-link" href="{{ route('users.index') }}">User</a>
+                            <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
+                                href="{{ route('users.index') }}">User</a>
                         @endcan
-                        <a class="nav-link" href="{{ route('categories.index') }}">Kategori</a>
-                        <a class="nav-link" href="{{ route('books.index') }}">Buku</a>
-                        <a class="nav-link" href="{{ route('members.index') }}">Anggota</a>
-                        <a class="nav-link" href="{{ route('borrowings.index') }}">Peminjaman</a>
+                        <a class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}"
+                            href="{{ route('categories.index') }}">Kategori</a>
+                        <a class="nav-link {{ request()->routeIs('books.*') ? 'active' : '' }}"
+                            href="{{ route('books.index') }}">Buku</a>
+                        <a class="nav-link {{ request()->routeIs('members.*') ? 'active' : '' }}"
+                            href="{{ route('members.index') }}">Anggota</a>
+                        <a class="nav-link {{ request()->routeIs('borrowings.*') ? 'active' : '' }}"
+                            href="{{ route('borrowings.index') }}">Peminjaman</a>
                     </nav>
                 </aside>
 
                 <!-- Content -->
-                <main class="col-md-9">
+                <main id="main-content">
                     @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <strong>Berhasil:</strong> {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                         </div>
                     @endif
 
                     @if($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <ul class="mb-0">
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                         </div>
                     @endif
 
                     @yield('content')
                 </main>
             </div>
-        </div>
 
-        <!-- Footer -->
-        <footer class="text-center text-muted py-3 mt-4 border-top">
-            <small>Sistem Informasi Perpustakaan Sederhana &bull; Zaki, Rizqi, Zhilan</small>
-        </footer>
+            <!-- Footer -->
+            <footer class="site-footer">
+                <span class="footer-mark">Sistem Informasi Perpustakaan Sederhana</span> &bull; Zaki, Rizqi, Zhilan
+            </footer>
+        </div>
 
     @else
 
