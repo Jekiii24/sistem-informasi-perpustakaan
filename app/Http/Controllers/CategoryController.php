@@ -1,78 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class CategoryController extends Controller
+class CategoryController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
+        return ['auth'];
     }
 
     public function index()
     {
         $categories = Category::all();
+
         return view('categories.index', compact('categories'));
     }
 
     public function create()
     {
-        // Hanya admin
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
         return view('categories.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
-
-        $validated = $request->validate([
-            'name' => 'required|string|unique:categories',
-            'description' => 'nullable|string',
-        ]);
-
-        Category::create($validated);
+        Category::create($request->validated());
 
         return redirect()->route('categories.index')->with('success', 'Kategori berhasil ditambahkan');
     }
 
     public function edit(Category $category)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
         return view('categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
-
-        $validated = $request->validate([
-            'name' => 'required|string|unique:categories,name,' . $category->id,
-            'description' => 'nullable|string',
-        ]);
-
-        $category->update($validated);
+        $category->update($request->validated());
 
         return redirect()->route('categories.index')->with('success', 'Kategori berhasil diubah');
     }
 
     public function destroy(Category $category)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
-
+        $this->authorize('delete', $category);
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus');

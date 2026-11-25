@@ -1,55 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBorrowingRequest;
 use App\Models\Book;
 use App\Models\Borrowing;
 use App\Models\BorrowingDetail;
 use App\Models\Member;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class BorrowingController extends Controller
+class BorrowingController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
+        return ['auth'];
     }
 
     public function index()
     {
         $borrowings = Borrowing::with('user', 'member', 'details.book')->latest()->paginate(10);
+
         return view('borrowings.index', compact('borrowings'));
     }
 
     public function show(Borrowing $borrowing)
     {
         $borrowing->load('user', 'member', 'details.book');
+
         return view('borrowings.show', compact('borrowing'));
     }
 
     public function create()
     {
-        if (!in_array(auth()->user()->role, ['admin', 'petugas'])) {
-            abort(403);
-        }
         $members = Member::all();
         $books = Book::where('stock', '>', 0)->get();
+
         return view('borrowings.create', compact('members', 'books'));
     }
 
-    public function store(Request $request)
+    public function store(StoreBorrowingRequest $request)
     {
-        if (!in_array(auth()->user()->role, ['admin', 'petugas'])) {
-            abort(403);
-        }
-
-        $validated = $request->validate([
-            'member_id' => 'required|exists:members,id',
-            'books' => 'required|array',
-            'books.*.book_id' => 'required|exists:books,id',
-            'books.*.qty' => 'required|integer|min:1',
-        ]);
+        $validated = $request->validated();
 
         // Validasi stok
         foreach ($validated['books'] as $item) {
@@ -85,10 +78,6 @@ class BorrowingController extends Controller
 
     public function returnBook(Borrowing $borrowing)
     {
-        if (!in_array(auth()->user()->role, ['admin', 'petugas'])) {
-            abort(403);
-        }
-
         if ($borrowing->status === 'returned') {
             return back()->withErrors('Peminjaman sudah dikembalikan');
         }
@@ -96,12 +85,8 @@ class BorrowingController extends Controller
         return view('borrowings.return', compact('borrowing'));
     }
 
-    public function storeReturn(Request $request, Borrowing $borrowing)
+    public function storeReturn(Borrowing $borrowing)
     {
-        if (!in_array(auth()->user()->role, ['admin', 'petugas'])) {
-            abort(403);
-        }
-
         if ($borrowing->status === 'returned') {
             return back()->withErrors('Peminjaman sudah dikembalikan');
         }

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class UserController extends Controller implements HasMiddleware
@@ -19,6 +22,7 @@ class UserController extends Controller implements HasMiddleware
     public function index()
     {
         $users = User::all();
+
         return view('users.index', compact('users'));
     }
 
@@ -27,17 +31,14 @@ class UserController extends Controller implements HasMiddleware
         return view('users.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
-            'role' => 'required|in:admin,petugas',
+        User::create([
+            'name' => $request->validated()['name'],
+            'email' => $request->validated()['email'],
+            'password' => bcrypt($request->validated()['password']),
+            'role' => $request->validated()['role'],
         ]);
-
-        $validated['password'] = bcrypt($validated['password']);
-        User::create($validated);
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan');
     }
@@ -47,22 +48,22 @@ class UserController extends Controller implements HasMiddleware
         return view('users.edit', compact('user'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,petugas',
+        $user->update([
+            'name' => $request->validated()['name'],
+            'email' => $request->validated()['email'],
+            'role' => $request->validated()['role'],
         ]);
-
-        $user->update($validated);
 
         return redirect()->route('users.index')->with('success', 'User berhasil diubah');
     }
 
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
         $user->delete();
+
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus');
     }
 }
