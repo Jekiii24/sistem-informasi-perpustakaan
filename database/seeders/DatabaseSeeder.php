@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -19,9 +21,9 @@ class DatabaseSeeder extends Seeder
     {
         // Hapus user yang ada agar tidak duplikat saat seeding ulang
         Schema::disableForeignKeyConstraints();
-User::truncate();
-// Jika ada perintah truncate() untuk tabel lain (misalnya Category::truncate() atau Book::truncate()), taruh juga di sini
-Schema::enableForeignKeyConstraints();
+        User::truncate();
+        // Jika ada perintah truncate() untuk tabel lain (misalnya Category::truncate() atau Book::truncate()), taruh juga di sini
+        Schema::enableForeignKeyConstraints();
 
         User::create([
             'name' => 'Admin Perpustakaan',
