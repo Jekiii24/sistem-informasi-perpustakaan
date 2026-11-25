@@ -16,10 +16,12 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
 // Protected routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+Route::resource('members', MemberController::class);
 
 // Admin routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -36,3 +38,4 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
 });
+
