@@ -11,12 +11,12 @@ class MemberPolicy
 {
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['admin', 'petugas'], true);
+        return $user->role === 'admin' || $user->role === 'petugas';
     }
 
     public function view(User $user, Member $member): bool
     {
-        return in_array($user->role, ['admin', 'petugas'], true);
+        return $user->role === 'admin' || $user->role === 'petugas';
     }
 
     public function create(User $user): bool

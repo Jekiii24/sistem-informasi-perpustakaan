@@ -28,6 +28,7 @@ class Borrowing extends Model
         return $this->belongsTo(Member::class);
     }
 
+    /** @return HasMany<BorrowingDetail, $this> */
     public function details(): HasMany
     {
         return $this->hasMany(BorrowingDetail::class);

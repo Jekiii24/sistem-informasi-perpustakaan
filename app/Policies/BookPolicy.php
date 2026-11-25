@@ -11,12 +11,12 @@ class BookPolicy
 {
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['admin', 'petugas'], true);
+        return $user->role === 'admin' || $user->role === 'petugas';
     }
 
     public function view(User $user, Book $book): bool
     {
-        return in_array($user->role, ['admin', 'petugas'], true);
+        return $user->role === 'admin' || $user->role === 'petugas';
     }
 
     public function create(User $user): bool

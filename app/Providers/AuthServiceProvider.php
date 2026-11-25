@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('petugas', function (User $user) {
-            return in_array($user->role, ['admin', 'petugas']);
+            return $user->role === 'admin' || $user->role === 'petugas';
         });
     }
 }
