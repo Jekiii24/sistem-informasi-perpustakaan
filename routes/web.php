@@ -21,7 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
-Route::resource('members', MemberController::class)
+Route::resource('members', MemberController::class);
 Route::resource('borrowings', BorrowingController::class);
 Route::post('borrowings/{borrowing}/return', [BorrowingController::class, 'storeReturn'])->name('borrowings.storeReturn');
 Route::get('borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.returnBook');

@@ -8,15 +8,23 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Book extends Model
 {
-    protected $fillable = ['category_id', 'title', 'isbn', 'author', 'publisher', 'stock', 'description'];
+    protected $fillable = [
+        'category_id',
+        'title',
+        'isbn',
+        'author',
+        'publisher',
+        'stock',
+        'description',
+    ];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
-}
 
-public function borrowingDetails(): HasMany
-{
-    return $this->hasMany(BorrowingDetail::class);
+    public function borrowingDetails(): HasMany
+    {
+        return $this->hasMany(BorrowingDetail::class);
+    }
 }
