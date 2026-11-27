@@ -10,6 +10,7 @@ use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller implements HasMiddleware
 {
@@ -48,7 +49,13 @@ class BookController extends Controller implements HasMiddleware
 
     public function store(StoreBookRequest $request)
     {
-        Book::create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('cover_image')) {
+            $data['cover_image'] = $request->file('cover_image')->store('covers', 'public');
+        }
+
+        Book::create($data);
 
         return redirect()->route('books.index')->with('success', 'Buku berhasil ditambahkan');
     }
@@ -62,13 +69,26 @@ class BookController extends Controller implements HasMiddleware
 
     public function update(UpdateBookRequest $request, Book $book)
     {
-        $book->update($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('cover_image')) {
+            if ($book->cover_image) {
+                Storage::disk('public')->delete($book->cover_image);
+            }
+            $data['cover_image'] = $request->file('cover_image')->store('covers', 'public');
+        }
+
+        $book->update($data);
 
         return redirect()->route('books.index')->with('success', 'Buku berhasil diubah');
     }
 
     public function destroy(Book $book)
     {
+        if ($book->cover_image) {
+            Storage::disk('public')->delete($book->cover_image);
+        }
+
         $book->delete();
 
         return redirect()->route('books.index')->with('success', 'Buku berhasil dihapus');

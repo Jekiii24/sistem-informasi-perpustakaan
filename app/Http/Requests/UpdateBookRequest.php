@@ -23,6 +23,7 @@ class UpdateBookRequest extends FormRequest
             'publisher' => 'required|string',
             'stock' => 'required|integer|min:0',
             'description' => 'nullable|string',
+            'cover_image' => 'nullable|image|max:2048',
         ];
     }
 }

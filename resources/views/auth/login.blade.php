@@ -5,7 +5,7 @@
 @push('styles')
     <style>
         body {
-            background: var(--paper);
+            background: var(--bg-main);
         }
 
         .login-page {
@@ -25,12 +25,12 @@
             border: 1px solid var(--line);
             border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: 0 1px 0 var(--line);
+            box-shadow: var(--shadow);
         }
 
         .login-aside {
-            background: var(--ink);
-            color: var(--paper);
+            background: var(--primary);
+            color: #fff;
             padding: 3rem 2.5rem;
             display: flex;
             flex-direction: column;
@@ -40,19 +40,19 @@
         .login-aside .aside-rule {
             width: 48px;
             height: 3px;
-            background: var(--accent);
+            background: #fff;
             margin-bottom: 1.5rem;
         }
 
         .login-aside h1 {
-            color: var(--paper);
+            color: #fff;
             font-size: 1.9rem;
             line-height: 1.25;
             margin-bottom: 0.9rem;
         }
 
         .login-aside p {
-            color: rgba(250, 250, 248, 0.72);
+            color: rgba(255, 255, 255, 0.85);
             font-size: 0.92rem;
             line-height: 1.7;
             margin: 0;
@@ -60,10 +60,9 @@
 
         .login-aside .aside-code {
             margin-top: 2rem;
-            font-family: var(--font-serif);
             font-size: 0.8rem;
             letter-spacing: 0.18em;
-            color: rgba(250, 250, 248, 0.4);
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .login-main {
@@ -76,7 +75,7 @@
         }
 
         .login-main .login-sub {
-            color: var(--muted);
+            color: var(--ink-light);
             font-size: 0.9rem;
             margin-bottom: 1.75rem;
         }
@@ -87,7 +86,7 @@
 
         .login-foot {
             margin-top: 1.75rem;
-            color: var(--muted);
+            color: var(--ink-light);
             font-size: 0.78rem;
             text-align: center;
         }

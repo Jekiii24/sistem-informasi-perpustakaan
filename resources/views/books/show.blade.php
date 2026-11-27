@@ -1,43 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>{{ $book->title }}</h1>
-
-    <div class="row">
-        <div class="col-md-8">
-            <table class="table">
-                <tr>
-                    <td><strong>ISBN</strong></td>
-                    <td>{{ $book->isbn }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Pengarang</strong></td>
-                    <td>{{ $book->author }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Penerbit</strong></td>
-                    <td>{{ $book->publisher }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Kategori</strong></td>
-                    <td>{{ $book->category->name }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Stok</strong></td>
-                    <td>{{ $book->stock }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Deskripsi</strong></td>
-                    <td>{{ $book->description }}</td>
-                </tr>
-            </table>
+    <div class="page-head">
+        <div>
+            <h1>{{ $book->title }}</h1>
+            <p class="page-head-sub">{{ $book->author }} &mdash; {{ $book->category->name }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ route('books.index') }}" class="btn btn-secondary">Kembali</a>
+            @if(auth()->user()->role === 'admin')
+                <a href="{{ route('books.edit', $book->id) }}" class="btn btn-warning">Edit</a>
+            @endif
         </div>
     </div>
 
-    <a href="{{ route('books.index') }}" class="btn btn-secondary">Kembali</a>
-    @if(auth()->user()->role === 'admin')
-        <a href="{{ route('books.edit', $book->id) }}" class="btn btn-warning">Edit</a>
-    @endif
-</div>
+    <div class="detail-card">
+        @if($book->cover_image)
+            <div class="mb-3">
+                <img src="{{ Storage::url($book->cover_image) }}" alt="Cover {{ $book->title }}"
+                    class="img-fluid rounded" style="max-height: 320px;">
+            </div>
+        @endif
+        <dl class="detail-list">
+            <div class="detail-row">
+                <dt>ISBN</dt>
+                <dd class="serif">{{ $book->isbn }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Pengarang</dt>
+                <dd>{{ $book->author }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Penerbit</dt>
+                <dd>{{ $book->publisher }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Kategori</dt>
+                <dd>{{ $book->category->name }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Stok</dt>
+                <dd>{{ $book->stock }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Deskripsi</dt>
+                <dd>{{ $book->description ?: '—' }}</dd>
+            </div>
+        </dl>
+    </div>
 @endsection

@@ -18,7 +18,7 @@ class CategoryController extends Controller implements HasMiddleware
 
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::withCount('books')->get();
 
         return view('categories.index', compact('categories'));
     }

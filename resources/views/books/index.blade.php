@@ -22,43 +22,40 @@
         </div>
     </form>
 
-    <div class="table-wrap">
-        <table class="table align-middle">
-            <thead>
-                <tr>
-                    <th>Judul</th>
-                    <th>Pengarang</th>
-                    <th>Kategori</th>
-                    <th>Stok</th>
-                    <th class="text-end">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($books as $book)
-                    <tr>
-                        <td class="serif">{{ $book->title }}</td>
-                        <td>{{ $book->author }}</td>
-                        <td>{{ $book->category->name }}</td>
-                        <td>{{ $book->stock }}</td>
-                        <td class="text-end">
-                            <a href="{{ route('books.show', $book->id) }}" class="btn btn-info btn-sm">Detail</a>
-                            @if(auth()->user()->role === 'admin')
-                                <a href="{{ route('books.edit', $book->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('books.destroy', $book->id) }}" method="POST" class="d-inline">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Hapus buku ini?')">Hapus</button>
-                                </form>
-                            @endif
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center muted py-4">Belum ada buku.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+    <div class="book-grid">
+        @forelse($books as $book)
+            <div class="book-card">
+                @if($book->cover_image)
+                    <img src="{{ Storage::url($book->cover_image) }}" alt="Cover {{ $book->title }}" class="book-card-cover">
+                @else
+                    <div class="book-card-cover" style="display: flex; align-items: center; justify-content: center; background: var(--primary-soft); color: var(--ink-light); font-size: 0.85rem;">
+                        Tidak ada cover
+                    </div>
+                @endif
+                <div class="book-card-body">
+                    <h3 class="book-card-title">{{ $book->title }}</h3>
+                    <p class="book-card-author">{{ $book->author }}</p>
+                    <div class="book-card-meta">
+                        <span class="book-card-category">{{ $book->category->name }}</span>
+                        <span class="book-card-stock">Stok: {{ $book->stock }}</span>
+                    </div>
+                    <div class="book-card-actions">
+                        <a href="{{ route('books.show', $book->id) }}" class="btn btn-info btn-sm">Detail</a>
+                        @if(auth()->user()->role === 'admin')
+                            <a href="{{ route('books.edit', $book->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('books.destroy', $book->id) }}" method="POST" class="d-inline">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus buku ini?')">Hapus</button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--ink-light);">
+                Belum ada buku.
+            </div>
+        @endforelse
     </div>
 
     <div class="mt-3">
